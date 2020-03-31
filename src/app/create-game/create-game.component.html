@@ -2,26 +2,26 @@
     <div class="general-data-container  fade-in">
         <div class="input-container" *ngIf="step>=0">
             <div class="label-div">
-                <label>ROUNDS:</label>
+                <label>{{'ROUNDS:' | translate }}</label>
             </div>
             <div class="input-div">
-                <input type="number" placeholder="roundsNumber" [(ngModel)]="game.roundsNumber"
-                    (keyup)="checkLetterError();checkRoundsError()" placeholder="Number of rounds">
+                <input type="number" [(ngModel)]="game.roundsNumber" (keyup)="checkLetterError();checkRoundsError()"
+                    placeholder="{{'Number of rounds' | translate }}">
             </div>
         </div>
         <div class="input-container" *ngIf="step>=0">
             <div class="label-div">
-                <label>PEOPLE:</label>
+                <label>{{'PEOPLE:' | translate }}</label>
             </div>
             <div class="input-div">
-                <input type="number" placeholder="People" [(ngModel)]="game.people" (keyup)="checkPeopleError()"
-                    placeholder="Number of people">
+                <input type="number" [(ngModel)]="game.people" (keyup)="checkPeopleError()"
+                    placeholder="{{'Number of people' | translate }}">
             </div>
         </div>
     </div>
     <div class="letters-container fade-in" *ngIf="step>=1">
         <div class="label-div">
-            <label>LETTERS:</label>
+            <label>{{'LETTERS:' | translate }}</label>
         </div>
         <div class="letters-inner-container" *ngIf="game.excludedLetters">
             <div *ngFor="let letter of allLetters" class="letter"
@@ -33,7 +33,7 @@
     </div>
     <div class="categories-container  fade-in" *ngIf="step>=2">
         <div class="label-div">
-            <label>CATEGORIES:</label>
+            <label>{{'CATEGORIES:' | translate }}</label>
         </div>
 
         <div class="categories-list suggested-list">
@@ -54,8 +54,9 @@
 
         <div class="add-category">
             <input type="text" [(ngModel)]="selectedCategory" (keyup.enter)="addCategory()"
-                placeholder="Custom category">
-            <button (click)="addCategory()" class="add-category-button fade-in" *ngIf="selectedCategory">ADD</button>
+                placeholder="{{'Custom category' | translate }}">
+            <button (click)="addCategory()" class="add-category-button fade-in"
+                *ngIf="selectedCategory">{{'ADD' | translate }}</button>
         </div>
         <div class="categories-list">
             <div *ngFor="let c of game.categories; let i = index" class="category added fade-in"
@@ -71,15 +72,15 @@
     </div>
 
     <div class="footer fade-in" *ngIf="step<2">
-        <button (click)="nextStep()" class="button">Next step</button>
+        <button (click)="nextStep()" class="button">{{'Next step' | translate }}</button>
     </div>
     <div class="footer">
-        <label *ngIf="categoriesError && step>=2" class="error fade-in">{{categoriesError}}</label>
-        <label *ngIf="peopleError" class="error fade-in">{{peopleError}}</label>
-        <label *ngIf="roundsError" class="error fade-in">{{roundsError}}</label>
-        <label *ngIf="lettersError && step>=1" class="error fade-in">{{lettersError}}</label>
+        <label *ngIf="categoriesError && step>=2" class="error fade-in">{{categoriesError | translate }}</label>
+        <label *ngIf="peopleError" class="error fade-in">{{peopleError | translate }}</label>
+        <label *ngIf="roundsError" class="error fade-in">{{roundsError | translate }}</label>
+        <label *ngIf="lettersError && step>=1" class="error fade-in">{{lettersError | translate }}</label>
     </div>
     <div class="footer" *ngIf="step>=2">
-        <button (click)="createGame()" class="button fade-in">Create game</button>
+        <button (click)="createGame()" class="button fade-in">{{'Create game' | translate }}</button>
     </div>
 </div>

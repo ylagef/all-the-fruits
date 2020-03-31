@@ -23,11 +23,9 @@ export class GameService {
       const round: Round = new Round();
       round.id = r;
 
-      console.log(this.letters);
       const lIndex = Math.floor(Math.random() * this.letters.length);
       round.letter = this.letters[lIndex];
       this.letters.splice(lIndex, 1);
-      console.log(round.letter);
 
       round.next = [];
 
@@ -89,8 +87,6 @@ export class GameService {
         if (!game.rounds[id].ended) {
           game.rounds[id].ended = true;
         }
-
-        console.log('updating my responses...');
 
         // Update responses
         for (let i = (from * amount); i < ((from * amount) + amount); i++) {

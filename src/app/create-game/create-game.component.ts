@@ -126,7 +126,7 @@ export class CreateGameComponent implements OnInit {
 
     if (this.categoryValidationActive) {
       if (this.game.categories.length < 3) {
-        this.categoriesError = 'At least 3 categories must be selected.';
+        this.categoriesError = 'At least 3 categories must be selected';
       } else {
         this.categoriesError = '';
       }
@@ -135,9 +135,9 @@ export class CreateGameComponent implements OnInit {
 
   public checkPeopleError(): void {
     if (this.game.people < 2) {
-      this.peopleError = 'At least 2 people.';
+      this.peopleError = 'At least 2 people';
     } else if (this.game.people > 20) {
-      this.peopleError = 'Max 20 people.';
+      this.peopleError = 'Max 20 people';
     } else {
       this.peopleError = '';
     }
@@ -145,7 +145,7 @@ export class CreateGameComponent implements OnInit {
 
   public checkRoundsError(): void {
     if (this.game.roundsNumber < 1) {
-      this.roundsError = 'At least 1 round.';
+      this.roundsError = 'At least 1 round';
     } else {
       this.roundsError = '';
     }
@@ -153,7 +153,7 @@ export class CreateGameComponent implements OnInit {
 
   public checkLetterError(): void {
     if ((this.game.excludedLetters.length + this.game.roundsNumber) > this.allLetters.length) {
-      this.lettersError = 'At least one letter per round must be available.';
+      this.lettersError = 'At least one letter per round must be available';
     } else {
       this.lettersError = '';
     }

@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './shared/services/auth.service';
-import { Location } from '@angular/common';
-import { Router } from '@angular/router';
 import { User } from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +15,17 @@ export class AppComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router,
+    public translate: TranslateService,
     private afAuth: AngularFireAuth
   ) {
     this.user = this.afAuth.authState;
+
+    translate.addLangs(['en', 'es']);
+    translate.setDefaultLang('es');
+  }
+
+  public switchLang(lang: string): void {
+    this.translate.use(lang);
   }
 
   public logOut(): void {

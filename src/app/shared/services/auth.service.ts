@@ -17,11 +17,13 @@ export class AuthService {
     private afAuth: AngularFireAuth
   ) {
     this.afAuth.authState.subscribe((u: User) => {
-      this.user = new User();
-      this.user.uid = u.uid;
-      this.user.displayName = u.displayName;
+      if (u) {
+        this.user = new User();
+        this.user.uid = u.uid;
+        this.user.displayName = u.displayName;
 
-      localStorage.setItem('user', JSON.stringify(this.user));
+        localStorage.setItem('user', JSON.stringify(this.user));
+      }
     });
   }
 

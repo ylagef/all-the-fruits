@@ -17,7 +17,7 @@ export class PlayGameComponent implements OnInit {
   public sortedUsers: User[];
   public categories: string[];
 
-  public routePrefix = 'https://all-the-fruits.firebaseapp.com/game/';
+  public routePrefix = 'atfgame.es/game/';
   // public routePrefix = 'localhost:4200/game/';
 
   public started = false;
@@ -35,15 +35,20 @@ export class PlayGameComponent implements OnInit {
 
   public results = {};
 
+  public isMobile: boolean;
+  public codeCopied: boolean;
+
   constructor(private gameService: GameService) { }
 
   ngOnInit() {
+    this.isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+
     this.game.subscribe(
       (game) => {
-        console.log('event received');
-        console.log('reviewing', this.reviewing);
+        // console.log('event received');
+        // console.log('reviewing', this.reviewing);
         if (!this.started) {
-          console.log('!started');
+          // console.log('!started');
           this.users = game.users;
 
           if (!this.categories) {
@@ -69,36 +74,36 @@ export class PlayGameComponent implements OnInit {
             }
           }
         } else if (!this.reviewing) {
-          console.log('! Reviewing');
+          // console.log('! Reviewing');
           if (game.rounds[this.roundNumber].ended) {
             // Round ended -> Next step or end round
-            console.log('Round ended');
+            // console.log('Round ended');
             if (this.allMyResponsesLoaded(game)) {
-              console.log('My responses loaded');
+              // console.log('My responses loaded');
               this.reviewing = true;
               this.rounds[this.roundNumber].responses = game.rounds[this.roundNumber].responses;
             } else {
-              console.log('My responses NOT loaded');
-              console.log('End round...');
+              // console.log('My responses NOT loaded');
+              // console.log('End round...');
               this.reviewing = false;
               this.endRound();
             }
           } else {
             // Round not ended, update responses
-            console.log('Round NOT ended');
+            // console.log('Round NOT ended');
             this.rounds[this.roundNumber].responses = game.rounds[this.roundNumber].responses;
           }
         } else if (this.reviewing) {
-          console.log('Reviewing');
+          // console.log('Reviewing');
           if (this.allMyResponsesLoaded(game)) {
-            console.log('My responses loaded');
+            // console.log('My responses loaded');
             this.rounds[this.roundNumber].next = game.rounds[this.roundNumber].next;
             this.rounds[this.roundNumber].responses = game.rounds[this.roundNumber].responses;
 
             this.checkNextRound(game);
           } else {
-            console.log('My responses NOT loaded');
-            console.log('End round...');
+            // console.log('My responses NOT loaded');
+            // console.log('End round...');
             this.reviewing = false;
             this.endRound();
           }
@@ -108,7 +113,7 @@ export class PlayGameComponent implements OnInit {
           this.roundNumber = game.currentRoundNumber;
         }
 
-        console.log(this.roundNumber, game.roundsNumber);
+        // console.log(this.roundNumber, game.roundsNumber);
         if (this.roundNumber + 1 > game.roundsNumber) {
           this.setSortedUsers();
         }
@@ -160,6 +165,14 @@ export class PlayGameComponent implements OnInit {
     selBox.select();
     document.execCommand('copy');
     document.body.removeChild(selBox);
+
+    this.codeCopied = true;
+    const t = setTimeout(
+      () => {
+        this.codeCopied = false;
+        clearTimeout(t);
+      }, 5000
+    );
   }
 
   private startCountdown(): void {
@@ -231,7 +244,6 @@ export class PlayGameComponent implements OnInit {
     game.rounds[this.roundNumber].responses.forEach(
       r => {
         if (r.user === JSON.parse(localStorage.getItem('user')).uid) {
-          console.log('my response', r);
           loaded++;
         }
       }

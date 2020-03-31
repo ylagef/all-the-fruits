@@ -2,7 +2,7 @@
 
 .play-game-container {
   .copy-code-container {
-    padding: 15px;
+    padding: 15px 0 5px 0;
 
     display: flex;
     align-items: center;
@@ -69,9 +69,52 @@
           background-color: #25d366;
           color: #fff;
           border-radius: 50px;
-          text-align: center;
-          font-size: 15px;
-          padding: 5px 8px;
+          padding: 5px;
+
+          i {
+            text-align: center;
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+      .te-div {
+        padding: 0 10px;
+        .float {
+          background-color: #0088cc;
+          color: #fff;
+          border-radius: 50px;
+          padding: 5px;
+
+          i {
+            text-align: center;
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+    }
+
+    .code-copied-container {
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      label {
+        font-size: 15px;
+        animation: fade 3s forwards;
+      }
+
+      @keyframes fade {
+        0% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
         }
       }
     }
@@ -83,12 +126,37 @@
       align-items: center;
       justify-content: center;
       padding: 10px;
+
+      .loading:after {
+        display: inline-block;
+        animation: dotty steps(1, end) 2s infinite;
+        content: "";
+      }
+
+      @keyframes dotty {
+        0% {
+          content: "";
+        }
+        25% {
+          content: ".";
+        }
+        50% {
+          content: "..";
+        }
+        75% {
+          content: "...";
+        }
+        100% {
+          content: "";
+        }
+      }
     }
 
     .users-container {
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-wrap: wrap;
 
       .user {
         width: 20%;
@@ -872,6 +940,18 @@
         background: black;
         color: white;
         border: 1px solid black;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .play-game-container {
+    .added-users {
+      .users-container {
+        .user {
+          width: 40%;
+        }
       }
     }
   }

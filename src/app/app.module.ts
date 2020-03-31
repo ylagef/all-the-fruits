@@ -16,6 +16,10 @@ import { GameComponent } from './game/game.component';
 import { PlayGameComponent } from './play-game/play-game.component';
 import { AngularFirePerformanceModule } from '@angular/fire/performance';
 
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +34,15 @@ import { AngularFirePerformanceModule } from '@angular/fire/performance';
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     FormsModule,
-    AngularFirePerformanceModule
+    AngularFirePerformanceModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     AuthService,
@@ -39,3 +51,8 @@ import { AngularFirePerformanceModule } from '@angular/fire/performance';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+// AOT compilation support
+export function httpTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
