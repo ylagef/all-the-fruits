@@ -40,6 +40,8 @@ export class PlayGameComponent implements OnInit {
   public isMobile: boolean;
   public codeCopied: boolean;
 
+  private nexted: boolean;
+
   constructor(private gameService: GameService) { }
 
   ngOnInit() {
@@ -135,8 +137,14 @@ export class PlayGameComponent implements OnInit {
 
       this.started = false;
       this.reviewing = false;
+      this.nexted = false;
 
       this.startCountdown();
+    } else {
+      const i = game.users.findIndex(u => u.uid === this.currentUser.uid);
+      if (this.nexted && !this.rounds[this.roundNumber].next[i]) {
+        this.nextRound();
+      }
     }
   }
 
@@ -267,6 +275,7 @@ export class PlayGameComponent implements OnInit {
   }
 
   public nextRound(): void {
+    this.nexted = true;
     this.gameService.updateNext(this.gameId, this.roundNumber, this.getCurrentUserIndex());
   }
 

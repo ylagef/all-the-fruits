@@ -1,5 +1,7 @@
 <div class="header fade-in">
-  <h1>ALL THE FRUITS</h1>
+  <div class="title-container">
+    <h1 [routerLink]="'/'">ALL THE FRUITS</h1>
+  </div>
   <h2>THE GAME</h2>
   <button (click)="logOut()" *ngIf="(user|async)">{{'Log out' | translate }}</button>
 

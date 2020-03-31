@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/services/auth.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { User } from '../shared/models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -13,16 +15,24 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private afAuth: AngularFireAuth,
+    private router: Router) { }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(
-      params => {
-        if (params.get('id')) {
-          this.nextRoute = params.get('id');
-        }
+    this.afAuth.authState.subscribe((user: User) => {
+      if (!user) {
+        this.route.paramMap.subscribe(
+          params => {
+            if (params.get('id')) {
+              this.nextRoute = params.get('id');
+            }
+          }
+        );
+      } else {
+        this.router.navigate(['/game']);
       }
-    );
+    });
   }
 
   public signIn(): void {

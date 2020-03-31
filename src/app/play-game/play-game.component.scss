@@ -64,7 +64,7 @@
       }
 
       .wa-div {
-        padding: 0 10px;
+        padding: 0 10px 0 20px;
         .float {
           background-color: #25d366;
           color: #fff;
@@ -879,7 +879,6 @@
               }
 
               .user-name {
-                width: 100%;
                 text-align: center;
                 padding: 3px;
               }
@@ -960,6 +959,72 @@
       .users-container {
         .user {
           width: 40%;
+        }
+      }
+    }
+
+    .started-container {
+      .category-container {
+        .category-outter {
+          .category-inner {
+            width: 100%;
+          }
+        }
+      }
+
+      .footer {
+        .button {
+          width: 60%;
+        }
+      }
+    }
+
+    .round-revision-container {
+      .categories-container {
+        width: 90%;
+        .category-outter {
+          .category-inner {
+            .response {
+              flex-wrap: wrap;
+
+              .username {
+                width: 100%;
+                justify-content: center;
+              }
+
+              .response-value {
+                width: 100%;
+              }
+
+              .validation-container {
+                width: 100%;
+              }
+
+              .checks {
+                padding-top: 5px;
+                max-width: 100%;
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .final-page-container {
+      .results-container {
+        .results-inner {
+          .users-container {
+            .user {
+              width: 80%;
+            }
+          }
+
+          .not-winner {
+            .user {
+              width: 35%;
+            }
+          }
         }
       }
     }
