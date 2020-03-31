@@ -16,6 +16,8 @@ export class GameComponent implements OnInit {
   public game: Observable<Game>;
   public gameId: string;
 
+  public loaded = false;
+
   constructor(
     private gameService: GameService,
     private route: ActivatedRoute,
@@ -26,15 +28,24 @@ export class GameComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe(
       params => {
-        if (params.get('id')) {
-          this.afAuth.authState.subscribe((user: User) => {
-            if (!user) {
+        this.afAuth.authState.subscribe((user: User) => {
+          if (!user) {
+            localStorage.removeItem('user');
+            if (params.get('id')) {
               this.router.navigate(['login/' + params.get('id')]);
             } else {
-              this.loadGame(params.get('id'));
+              this.router.navigate(['login']);
             }
-          });
-        }
+          } else {
+            if (params.get('id')) {
+              this.loadGame(params.get('id'));
+            } else {
+              this.loaded = true;
+            }
+          }
+        });
+
+
       }
     );
   }
@@ -45,7 +56,12 @@ export class GameComponent implements OnInit {
     const game = this.gameService.getGame(id);
     const sub = game.subscribe(
       (g: Game) => {
-        if (g === undefined) {
+        this.loaded = true;
+
+        const current = JSON.parse(localStorage.getItem('user'));
+        if (g === undefined ||
+          ((g.people === g.users.length) && !(g.users.find(u => u.uid === current.uid)))) {
+          // If undefined, if full and I'm not player
           this.router.navigate(['game']);
         } else {
           this.game = game;

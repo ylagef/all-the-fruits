@@ -3,14 +3,14 @@
   <h2>THE GAME</h2>
   <button (click)="logOut()" *ngIf="(user|async)">{{'Log out' | translate }}</button>
 
-  <span class="form-inline">
+  <!-- <span class="form-inline">
     <select class="form-control" #selectedLang (change)="switchLang(selectedLang.value)">
       <option *ngFor="let language of translate.getLangs()" [value]="language"
         [selected]="language === translate.currentLang">
         {{ language }}
       </option>
     </select>
-  </span>
+  </span> -->
 </div>
 
 <router-outlet></router-outlet>

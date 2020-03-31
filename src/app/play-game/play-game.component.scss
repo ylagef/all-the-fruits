@@ -629,6 +629,8 @@
             justify-content: center;
             width: 100%;
 
+            padding: 0 0 10px 0;
+
             h2 {
               margin: 0;
             }
@@ -637,19 +639,19 @@
           .response {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             width: 100%;
 
-            padding: 2px;
+            padding: 5px;
 
             .username {
               width: 20%;
               display: flex;
               align-items: center;
-              justify-content: center;
+              justify-content: end;
 
               .name {
-                margin-left: 5px;
+                margin-left: 10px;
               }
             }
 
@@ -658,6 +660,7 @@
               overflow: auto;
               text-align: center;
               font-weight: bold;
+              padding: 5px;
 
               .crossed {
                 text-decoration: line-through;
@@ -666,10 +669,11 @@
             }
 
             .validation-container {
-              width: 10%;
+              width: 50px;
               display: flex;
               align-items: center;
               justify-content: center;
+              padding: 0 5px;
 
               .button {
                 background: transparent;
@@ -705,13 +709,18 @@
             }
 
             .checks {
-              width: 10%;
+              max-width: 15%;
+              min-width: 10%;
               display: flex;
               align-items: center;
               justify-content: center;
+              flex-wrap: wrap;
 
               .check {
                 padding: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
 
                 .fa {
                   font-size: 20px;
@@ -759,7 +768,7 @@
             color: darkgreen;
           }
 
-          .fa-clock-o {
+          .fa-clock {
             color: lightsalmon;
           }
         }

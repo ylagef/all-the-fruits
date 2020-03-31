@@ -1,4 +1,4 @@
-<div class="play-game-container">
+<div class="play-game-container" *ngIf="game|async">
     <div class="copy-code-container fade-in" *ngIf="!started && !starting">
         <div class="label-div">
             <label>{{'Share this code for start playing!' | translate }}</label>
@@ -157,8 +157,8 @@
                         </div>
                         <div class="checks">
                             <div *ngFor="let v of response.valid" class="check">
-                                <i class="fa fa-check-square" *ngIf="v"></i>
-                                <i class="fa fa-window-close" *ngIf="!v"></i>
+                                <i class="fas fa-check-square" *ngIf="v"></i>
+                                <i class="fas fa-window-close" *ngIf="!v"></i>
                             </div>
                         </div>
                     </div>
@@ -172,8 +172,8 @@
                     <div class="name">
                         {{user.displayName}}
                     </div>
-                    <i class="fa fa-check" *ngIf="rounds[roundNumber].next[i]"></i>
-                    <i class="fa fa-clock-o" *ngIf="!rounds[roundNumber].next[i]"></i>
+                    <i class="fas fa-check fade-in" *ngIf="rounds[roundNumber].next[i]"></i>
+                    <i class="far fa-clock fade-in" *ngIf="!rounds[roundNumber].next[i]"></i>
                 </div>
             </div>
             <div class="button-container">

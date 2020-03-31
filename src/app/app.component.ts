@@ -21,7 +21,10 @@ export class AppComponent {
     this.user = this.afAuth.authState;
 
     translate.addLangs(['en', 'es']);
-    translate.setDefaultLang('es');
+
+    // Set lang based on browser lang
+    const lang = navigator.language;
+    translate.setDefaultLang(lang.split('-')[0]);
   }
 
   public switchLang(lang: string): void {

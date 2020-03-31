@@ -51,7 +51,10 @@ export class AuthService {
   // Firebase Logout
   public signOut(): void {
     this.afAuth.auth.signOut().then(
-      () => this.router.navigate(['/'])
+      () => {
+        localStorage.removeItem('user');
+        this.router.navigate(['/']);
+      }
     ).catch(error => console.error(error));
   }
 }

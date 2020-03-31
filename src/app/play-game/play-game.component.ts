@@ -13,6 +13,8 @@ export class PlayGameComponent implements OnInit {
   @Input() game: Observable<Game>;
   @Input() gameId: string;
 
+  private currentUser: User;
+
   public users: User[];
   public sortedUsers: User[];
   public categories: string[];
@@ -42,11 +44,11 @@ export class PlayGameComponent implements OnInit {
 
   ngOnInit() {
     this.isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-
+    this.currentUser = JSON.parse(localStorage.getItem('user'));
     this.game.subscribe(
       (game) => {
+        // this.reviewing = !this.started && (game.rounds[game.currentRoundNumber] && game.rounds[game.currentRoundNumber].ended);
         // console.log('event received');
-        // console.log('reviewing', this.reviewing);
         if (!this.started) {
           // console.log('!started');
           this.users = game.users;
@@ -64,15 +66,15 @@ export class PlayGameComponent implements OnInit {
               this.started = true;
             }
           } else {
-            const user = JSON.parse(localStorage.getItem('user'));
-
-            if (user) {
-              if (!this.users.find(u => u.uid === user.uid)) {
-                this.users.push(user);
+            if (this.currentUser) {
+              if (!this.users.find(u => u.uid === this.currentUser.uid)) {
+                this.users.push(this.currentUser);
                 this.gameService.addUserToGame(this.gameId, this.users, this.users.length === game.people);
               }
             }
           }
+
+          this.reviewing = game.rounds[game.currentRoundNumber] && game.rounds[game.currentRoundNumber].ended;
         } else if (!this.reviewing) {
           // console.log('! Reviewing');
           if (game.rounds[this.roundNumber].ended) {
@@ -126,6 +128,7 @@ export class PlayGameComponent implements OnInit {
   }
 
   private checkNextRound(game: Game): void {
+    // console.log('Check round');
     if (!this.rounds[this.roundNumber].next.includes(false)) {
       // console.log('Next round');
       this.refreshRounds(game);
@@ -196,7 +199,7 @@ export class PlayGameComponent implements OnInit {
   }
 
   public getUserResponses(): Response[] {
-    const uid = JSON.parse(localStorage.getItem('user')).uid;
+    const uid = this.currentUser.uid;
 
     return (this.rounds[this.roundNumber]) ?
       this.rounds[this.roundNumber].responses.filter(
@@ -206,7 +209,7 @@ export class PlayGameComponent implements OnInit {
 
   public endRound(): void {
     // Save response
-    const uid = JSON.parse(localStorage.getItem('user')).uid;
+    const uid = this.currentUser.uid;
     const uindex = this.users.findIndex(u => u.uid === uid);
 
     this.gameService.stopRound(this.gameId, this.roundNumber, this.rounds[this.roundNumber], uindex, this.categories.length,
@@ -218,7 +221,7 @@ export class PlayGameComponent implements OnInit {
   }
 
   public getCurrentUserIndex() {
-    return this.users.findIndex(u => u.uid === JSON.parse(localStorage.getItem('user')).uid);
+    return this.users.findIndex(u => u.uid === this.currentUser.uid);
   }
 
   public getCategoryResponses(responses: Response[], category: number) {
@@ -243,7 +246,7 @@ export class PlayGameComponent implements OnInit {
 
     game.rounds[this.roundNumber].responses.forEach(
       r => {
-        if (r.user === JSON.parse(localStorage.getItem('user')).uid) {
+        if (r.user === this.currentUser.uid) {
           loaded++;
         }
       }

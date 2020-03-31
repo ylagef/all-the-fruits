@@ -1,4 +1,4 @@
-<div class="game-container">
+<div class="game-container" *ngIf="loaded">
     <app-create-game *ngIf="!game"></app-create-game>
     <app-play-game *ngIf="game" [game]="game" [gameId]="gameId"></app-play-game>
 </div>
