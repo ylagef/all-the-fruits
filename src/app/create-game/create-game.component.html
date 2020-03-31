@@ -38,12 +38,16 @@
 
         <div class="categories-list suggested-list">
             <div *ngFor="let c of suggestedCategories; let i = index" class="category suggested fade-in"
-                (click)="addSuggestedCategory(i)">
+                (click)="categoryAdded(c)?removeSuggestedCategory(i):addSuggestedCategory(i)"
+                [class.suggested-added]="categoryAdded(c)">
                 <div class="category-name">
                     {{c}}
                 </div>
-                <div class="add-div">
+                <div class="add-div" *ngIf="!categoryAdded(c)">
                     <i class="fa fa-plus" aria-hidden="true"></i>
+                </div>
+                <div class="trash-div" *ngIf="categoryAdded(c)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
                 </div>
             </div>
         </div>
@@ -51,8 +55,7 @@
         <div class="add-category">
             <input type="text" [(ngModel)]="selectedCategory" (keyup.enter)="addCategory()"
                 placeholder="Custom category">
-            <!-- ($event.value===13)?addCategory():null -->
-            <button (click)="addCategory()" class="add-category-button">ADD</button>
+            <button (click)="addCategory()" class="add-category-button fade-in" *ngIf="selectedCategory">ADD</button>
         </div>
         <div class="categories-list">
             <div *ngFor="let c of game.categories; let i = index" class="category added fade-in"

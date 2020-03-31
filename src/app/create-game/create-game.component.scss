@@ -180,6 +180,11 @@
           position: absolute;
           color: rgba(0, 0, 0, 0.8);
         }
+        .trash-div {
+          opacity: 0;
+          position: absolute;
+          color: rgba(0, 0, 0, 0.8);
+        }
       }
 
       .suggested:hover {
@@ -198,7 +203,6 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        font-size: 15px;
 
         .trash-div {
           opacity: 0;
@@ -208,6 +212,26 @@
       }
 
       .added:hover {
+        background-color: lightcoral;
+
+        .category-name {
+          opacity: 0.2;
+        }
+        .trash-div {
+          opacity: 1;
+        }
+      }
+      .suggested-added {
+        background-color: lightcoral;
+
+        .category-name {
+          opacity: 0.2;
+        }
+        .trash-div {
+          opacity: 1;
+        }
+      }
+      .suggested-added:hover {
         background-color: lightcoral;
 
         .category-name {

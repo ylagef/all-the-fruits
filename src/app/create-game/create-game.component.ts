@@ -75,8 +75,15 @@ export class CreateGameComponent implements OnInit {
 
     this.checkCategoriesError();
   }
-  public addSuggestedCategory(index: number) {
+
+  public addSuggestedCategory(index: number): void {
     this.game.categories.push(this.suggestedCategories[index]);
+
+    this.checkCategoriesError();
+  }
+
+  public removeSuggestedCategory(index: number): void {
+    this.game.categories.splice(this.game.categories.indexOf(this.suggestedCategories[index]), 1);
 
     this.checkCategoriesError();
   }
@@ -103,7 +110,7 @@ export class CreateGameComponent implements OnInit {
     }
   }
 
-  public checkCategoriesError() {
+  public checkCategoriesError(): void {
     if (this.game.categories.length > 2 && !this.categoryValidationActive) {
       this.categoryValidationActive = true;
     }
@@ -117,7 +124,7 @@ export class CreateGameComponent implements OnInit {
     }
   }
 
-  public checkPeopleError() {
+  public checkPeopleError(): void {
     if (this.game.people < 2) {
       this.peopleError = 'At least 2 people.';
     } else if (this.game.people > 20) {
@@ -127,7 +134,7 @@ export class CreateGameComponent implements OnInit {
     }
   }
 
-  public checkRoundsError() {
+  public checkRoundsError(): void {
     if (this.game.roundsNumber < 1) {
       this.roundsError = 'At least 1 round.';
     } else {
@@ -135,12 +142,18 @@ export class CreateGameComponent implements OnInit {
     }
   }
 
-  public checkLetterError() {
+  public checkLetterError(): void {
     if ((this.game.excludedLetters.length + this.game.roundsNumber) > this.allLetters.length) {
       this.lettersError = 'At least one letter per round must be available.';
     } else {
       this.lettersError = '';
     }
+  }
+
+  public categoryAdded(category: string): boolean {
+    console.log(this.game.categories.find((c => c.toLowerCase().split(' ').join('') === category.toLowerCase().split(' ').join(''))));
+    return this.game.categories.find((c => c.toLowerCase().split(' ').join('') === category.toLowerCase().split(' ').join('')))
+      !== undefined;
   }
 
   public nextStep(): void {
