@@ -1,0 +1,82 @@
+<div class="create-game-container" *ngIf="game">
+    <div class="general-data-container  fade-in">
+        <div class="input-container" *ngIf="step>=0">
+            <div class="label-div">
+                <label>ROUNDS:</label>
+            </div>
+            <div class="input-div">
+                <input type="number" placeholder="roundsNumber" [(ngModel)]="game.roundsNumber"
+                    (keyup)="checkLetterError();checkRoundsError()" placeholder="Number of rounds">
+            </div>
+        </div>
+        <div class="input-container" *ngIf="step>=0">
+            <div class="label-div">
+                <label>PEOPLE:</label>
+            </div>
+            <div class="input-div">
+                <input type="number" placeholder="People" [(ngModel)]="game.people" (keyup)="checkPeopleError()"
+                    placeholder="Number of people">
+            </div>
+        </div>
+    </div>
+    <div class="letters-container fade-in" *ngIf="step>=1">
+        <div class="label-div">
+            <label>LETTERS:</label>
+        </div>
+        <div class="letters-inner-container" *ngIf="game.excludedLetters">
+            <div *ngFor="let letter of allLetters" class="letter"
+                [ngStyle]="{'background-color': (game.excludedLetters.includes(letter))?'lightcoral':'lightgreen'}"
+                (click)="handleLetter(letter)">
+                {{letter}}
+            </div>
+        </div>
+    </div>
+    <div class="categories-container  fade-in" *ngIf="step>=2">
+        <div class="label-div">
+            <label>CATEGORIES:</label>
+        </div>
+
+        <div class="categories-list suggested-list">
+            <div *ngFor="let c of suggestedCategories; let i = index" class="category suggested fade-in"
+                (click)="addSuggestedCategory(i)">
+                <div class="category-name">
+                    {{c}}
+                </div>
+                <div class="add-div">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-category">
+            <input type="text" [(ngModel)]="selectedCategory" (keyup.enter)="addCategory()"
+                placeholder="Custom category">
+            <!-- ($event.value===13)?addCategory():null -->
+            <button (click)="addCategory()" class="add-category-button">ADD</button>
+        </div>
+        <div class="categories-list">
+            <div *ngFor="let c of game.categories; let i = index" class="category added fade-in"
+                (click)="removeCategory(i)">
+                <div class="category-name">
+                    {{c}}
+                </div>
+                <div class="trash-div">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer fade-in" *ngIf="step<2">
+        <button (click)="nextStep()" class="button">Next step</button>
+    </div>
+    <div class="footer">
+        <label *ngIf="categoriesError && step>=2" class="error fade-in">{{categoriesError}}</label>
+        <label *ngIf="peopleError" class="error fade-in">{{peopleError}}</label>
+        <label *ngIf="roundsError" class="error fade-in">{{roundsError}}</label>
+        <label *ngIf="lettersError && step>=1" class="error fade-in">{{lettersError}}</label>
+    </div>
+    <div class="footer" *ngIf="step>=2">
+        <button (click)="createGame()" class="button fade-in">Create game</button>
+    </div>
+</div>

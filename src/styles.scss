@@ -1,1 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+html {
+  height: 100%;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.1rem;
+  height: 100%;
+  margin: 0;
+}
+
+input:focus {
+  outline-color: transparent;
+}
+button:focus {
+  outline-color: transparent;
+}
+button {
+  cursor: pointer;
+}

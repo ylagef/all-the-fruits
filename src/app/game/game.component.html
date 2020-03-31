@@ -1,0 +1,7 @@
+<div class="game-container">
+    <app-create-game *ngIf="!game"></app-create-game>
+    <app-play-game *ngIf="game" [game]="game" [gameId]="gameId"></app-play-game>
+
+    <!-- <h2>{{routePrefix}}{{gameId}}</h2>
+    {{(game | async) | json}} -->
+</div>

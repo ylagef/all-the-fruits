@@ -1,0 +1,71 @@
+@import "../styles.scss";
+
+.header {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.8);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  color: white;
+
+  padding: 10px;
+
+  h1 {
+    width: 100%;
+    margin: 0;
+    font-family: "Bebas Neue", cursive;
+    font-size: 50px;
+  }
+
+  h2 {
+    width: 100%;
+    margin: 0;
+    font-family: "Bebas Neue", cursive;
+    font-weight: normal;
+  }
+
+  button {
+    margin-top: 3px;
+    border: 1px solid white;
+    background: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+
+    cursor: pointer;
+  }
+  button:hover {
+    border: 1px solid white;
+    background: white;
+    color: rgba(0, 0, 0, 0.8);
+    padding: 5px 10px;
+    border-radius: 10px;
+  }
+}
+
+.fade-in {
+  // animation-timing-function: linear;
+  animation-duration: 1s;
+  animation-name: fade-in;
+  animation-fill-mode: forwards;
+}
+
+.fade-delay {
+  animation-delay: 0.5s;
+  animation-duration: 1s;
+  animation-name: fade-in;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 100;
+  }
+}

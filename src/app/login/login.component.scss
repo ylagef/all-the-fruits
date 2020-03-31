@@ -1,0 +1,69 @@
+@import "../app.component.scss";
+
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  padding: 10px;
+
+  .login-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+
+    text-align: center;
+  }
+
+  .button-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation-delay: 1s;
+
+    .google-btn {
+      width: 210px;
+      height: 45px;
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 2px;
+      padding: 5px;
+      box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.25);
+      .google-icon-wrapper {
+        position: absolute;
+        margin-top: 1px;
+        margin-left: 1px;
+        width: 40px;
+        height: 40px;
+        border-radius: 2px;
+        background-color: #fff;
+      }
+      .google-icon {
+        position: absolute;
+        margin-top: 11px;
+        margin-left: 11px;
+        width: 18px;
+        height: 18px;
+      }
+      .btn-text {
+        float: right;
+        margin: 11px 11px 0 0;
+        color: #fff;
+        font-size: 14px;
+        letter-spacing: 0.2px;
+        font-family: "Montserrat", sans-serif;
+      }
+      &:hover {
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+        cursor: pointer;
+      }
+      &:active {
+        background: rgba(0, 0, 0, 0.7);
+      }
+    }
+  }
+}

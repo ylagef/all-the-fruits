@@ -1,0 +1,200 @@
+<div class="play-game-container">
+
+    <!-- reviewing -{{reviewing}}- -->
+    <div class="copy-code-container fade-in" *ngIf="!started && !starting">
+        <div class="label-div">
+            <label>Share this code for start playing!</label>
+        </div>
+        <div class="input-container">
+            <input disabled [value]="routePrefix+gameId">
+        </div>
+        <div class="button-container">
+            <button (click)="copyMessage()">Copy code</button>
+
+            <div class="wa-div">
+                <link rel="stylesheet"
+                    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+                <a href="https://web.whatsapp.com/send?text={{routePrefix}}{{gameId}}" class="float" target="_blank">
+                    <i class="fa fa-whatsapp my-float"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="added-users" *ngIf="!started && !starting">
+        <div class="waiting-div">
+            <label>Waiting for {{(game|async)?.people - users?.length}} players...</label>
+        </div>
+        <div class="users-container">
+            <div *ngFor="let user of users" class="user fade-in">
+                <div class="user-inner">
+                    <div class="user-icon">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <div class="user-name">
+                        {{user?.displayName}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="starting-container fade-in" *ngIf="starting && !(roundNumber+1>(game|async)?.roundsNumber)">
+        <div class="text-container">
+            <h1>Starting round...</h1>
+        </div>
+
+        <div class="text-container">
+            <h2>{{getCeilNumber(remainingSeconds)}}s</h2>
+        </div>
+
+        <div class="progress_container">
+            <div class="progress progress-danger
+                 progress-striped active">
+                <div class="bar" [ngStyle]="{'width': remainingSeconds*20+'%'}"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="started-container" *ngIf="started && !reviewing && !(roundNumber+1>(game|async)?.roundsNumber)">
+        <div class="header-div fade-in">
+            <h3>
+                ROUND {{roundNumber + 1}}/{{(game|async)?.roundsNumber}}
+            </h3>
+            <h1>
+                {{currentLetter}}
+            </h1>
+        </div>
+
+        <div class="category-container" *ngIf="!reviewing">
+            <div *ngFor="let response of getUserResponses()" class="category-outter fade-delay">
+                <div class="category-inner">
+                    <div class="category-name-div">
+                        <h3><strong>{{ categories[response.category] }}</strong></h3>
+                    </div>
+
+                    <div class="input-div">
+                        <input [(ngModel)]="response.responseValue" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer fade-delay" *ngIf="!reviewing">
+            <button class="button" (click)="endRound()">STOP!</button>
+        </div>
+    </div>
+
+    <div class="round-revision-container" *ngIf="reviewing && !(roundNumber+1>(game|async)?.roundsNumber)">
+        <div class="header-div fade-in">
+            <h3>
+                ROUND {{roundNumber + 1}}/{{(game|async)?.roundsNumber}}
+            </h3>
+            <h1>
+                {{currentLetter}}
+            </h1>
+        </div>
+
+        <div class="categories-container fade-in" *ngIf="allResponsesLoaded()">
+            <div class="category-outter" *ngFor="let category of categories; let categoryIndex=index;">
+                <div class="category-inner">
+                    <div class="category-header">
+                        <h2>
+                            {{category}}
+                        </h2>
+                    </div>
+
+                    <div *ngFor="let response of getCategoryResponses(rounds[roundNumber].responses, categoryIndex)"
+                        class="response">
+                        <div class="username">
+                            <i class="fa fa-user"></i>
+                            <div class="name">
+                                {{getUserName(response.user)}}
+                            </div>
+                        </div>
+                        <div class="response-value">
+                            <div *ngIf="response.responseValue.trim()!==''">
+                                <div class="crossed" *ngIf="!isValidResponse(response)">
+                                    {{response.responseValue}}
+                                </div>
+                                <div *ngIf="isValidResponse(response)">
+                                    {{response.responseValue}}
+                                </div>
+                            </div>
+
+                            <div *ngIf="response.responseValue.trim()===''">
+                                <div class="crossed">
+                                    NOT FILLED
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="validation-container">
+                            <button class="invalidate button" *ngIf="response.valid[getCurrentUserIndex()]"
+                                (click)="check(response)">
+                                NO!
+                            </button>
+                            <button class="validate button"
+                                *ngIf="!response.valid[getCurrentUserIndex()]&& !(response.responseValue.trim()==='')"
+                                (click)="check(response)">
+                                YES!
+                            </button>
+                        </div>
+                        <div class="checks">
+                            <div *ngFor="let v of response.valid" class="check">
+                                <i class="fa fa-check-square" *ngIf="v"></i>
+                                <i class="fa fa-window-close" *ngIf="!v"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer fade-delay" *ngIf="allResponsesLoaded()">
+            <div class="users-next-round">
+                <div *ngFor="let user of users;let i=index;" class="user">
+                    <div class="name">
+                        {{user.displayName}}
+                    </div>
+                    <i class="fa fa-check" *ngIf="rounds[roundNumber].next[i]"></i>
+                    <i class="fa fa-clock-o" *ngIf="!rounds[roundNumber].next[i]"></i>
+                </div>
+            </div>
+            <div class="button-container">
+                <button class="button" (click)="nextRound()">Next round</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="final-page-container" *ngIf="roundNumber+1>(game|async)?.roundsNumber">
+        <div class="final-header">
+            <h1>GAME ENDED!</h1>
+        </div>
+
+        <div class="results-container" *ngIf="getSortedUsers()">
+            <div class="results-inner">
+                <div class="users-container">
+                    <div *ngFor="let user of getSortedUsers()" class="user">
+                        <div class="user-inner">
+                            <div class="user-icon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="user-name">
+                                {{user?.displayName}}
+                            </div>
+                            <div class="points">
+                                {{results[user?.uid]}}pts
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="final-footer">
+            <button [routerLink]="'/game'">CREATE NEW GAME</button>
+        </div>
+    </div>
+
+</div>
