@@ -14,6 +14,7 @@ import { LoginComponent } from './login/login.component';
 import { CreateGameComponent } from './create-game/create-game.component';
 import { GameComponent } from './game/game.component';
 import { PlayGameComponent } from './play-game/play-game.component';
+import { AngularFirePerformanceModule } from '@angular/fire/performance';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { PlayGameComponent } from './play-game/play-game.component';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
-    FormsModule
+    FormsModule,
+    AngularFirePerformanceModule
   ],
   providers: [
     AuthService,

@@ -735,6 +735,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
+
+      h1 {
+        margin-bottom: 0px;
+      }
     }
     .results-container {
       width: 100%;
@@ -747,12 +751,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-wrap: wrap;
 
         .users-container {
           width: 100%;
           display: flex;
           align-items: center;
           justify-content: center;
+          flex-wrap: wrap;
 
           .user {
             width: 20%;
@@ -766,7 +772,7 @@
             .user-inner {
               width: 100%;
               height: 100%;
-              background: lightgray;
+              background: lightgreen;
               border-radius: 15px;
 
               -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
@@ -779,10 +785,19 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 3px;
+                padding: 20px 0px 15px 0;
 
-                i {
+                .fa-user {
                   font-size: 40px;
+                }
+
+                .fa-crown {
+                  font-size: 23px;
+                  color: yellow;
+                  margin-top: -20px;
+
+                  -webkit-text-stroke-width: 1px;
+                  -webkit-text-stroke-color: black;
                 }
               }
 
@@ -793,10 +808,40 @@
               }
 
               .points {
-                width: 100%;
                 text-align: center;
                 font-size: 35px;
+                padding: 5px 0 10px 0;
+              }
+            }
+          }
+        }
+
+        .not-winner {
+          .user {
+            width: 15%;
+            padding: 10px;
+
+            .user-inner {
+              background: #d3d3d380;
+
+              .user-position {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
                 padding: 5px;
+
+                h4 {
+                  margin: 0;
+                }
+              }
+
+              .user-name {
+                padding: 3px;
+              }
+
+              .points {
+                font-size: 15px;
               }
             }
           }

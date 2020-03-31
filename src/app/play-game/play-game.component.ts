@@ -14,6 +14,7 @@ export class PlayGameComponent implements OnInit {
   @Input() gameId: string;
 
   public users: User[];
+  public sortedUsers: User[];
   public categories: string[];
 
   public routePrefix = 'https://all-the-fruits.firebaseapp.com/game/';
@@ -106,6 +107,12 @@ export class PlayGameComponent implements OnInit {
         if (game.currentRoundNumber > this.roundNumber) {
           this.roundNumber = game.currentRoundNumber;
         }
+
+        console.log(this.roundNumber, game.roundsNumber);
+        if (this.roundNumber + 1 > game.roundsNumber) {
+          this.setSortedUsers();
+        }
+
         if (this.rounds && this.rounds[this.roundNumber]) {
           this.currentLetter = game.rounds[this.roundNumber].letter;
         }
@@ -283,9 +290,9 @@ export class PlayGameComponent implements OnInit {
     });
   }
 
-  public getSortedUsers(): User[] {
+  public setSortedUsers(): void {
     this.getResults();
-    
+
     const points: number[] = [];
     this.users.forEach(u => {
       points.push(this.results[u.uid]);
@@ -308,7 +315,7 @@ export class PlayGameComponent implements OnInit {
       sortedPoints[sortedPoints.indexOf(this.results[u.uid])] = null;
     });
 
-    return sortedUsers;
+    this.sortedUsers = sortedUsers;
   }
 
   private getMatches(array: string[], test: string) {

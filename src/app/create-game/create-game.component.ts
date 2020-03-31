@@ -68,7 +68,7 @@ export class CreateGameComponent implements OnInit {
   }
 
   public addCategory(): void {
-    if (this.selectedCategory !== '') {
+    if (this.selectedCategory !== '' && !this.categoryAdded(this.selectedCategory)) {
       this.game.categories.push(this.selectedCategory);
       this.selectedCategory = '';
     }
@@ -77,13 +77,20 @@ export class CreateGameComponent implements OnInit {
   }
 
   public addSuggestedCategory(index: number): void {
-    this.game.categories.push(this.suggestedCategories[index]);
+    if (!this.categoryAdded(this.suggestedCategories[index])) {
+      this.game.categories.push(this.suggestedCategories[index]);
+    }
 
     this.checkCategoriesError();
   }
 
-  public removeSuggestedCategory(index: number): void {
-    this.game.categories.splice(this.game.categories.indexOf(this.suggestedCategories[index]), 1);
+  public removeSuggestedCategory(i: number): void {
+    const index = this.game.categories.findIndex(c =>
+      c.toLowerCase().split(' ').join('').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      === this.suggestedCategories[i].toLowerCase().split(' ').join('').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    );
+
+    this.game.categories.splice(index, 1);
 
     this.checkCategoriesError();
   }
@@ -95,7 +102,9 @@ export class CreateGameComponent implements OnInit {
   }
 
   public createGame(): void {
+    this.categoryValidationActive = true;
     this.checkCategoriesError();
+
     this.checkPeopleError();
     this.checkRoundsError();
     this.checkLetterError();
@@ -151,8 +160,12 @@ export class CreateGameComponent implements OnInit {
   }
 
   public categoryAdded(category: string): boolean {
-    return this.game.categories.find((c => c.toLowerCase().split(' ').join('') === category.toLowerCase().split(' ').join('')))
-      !== undefined;
+    return this.game.categories.find(
+      ((c: string) =>
+        c.toLowerCase().split(' ').join('').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        === category.toLowerCase().split(' ').join('').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      )
+    ) !== undefined;
   }
 
   public nextStep(): void {

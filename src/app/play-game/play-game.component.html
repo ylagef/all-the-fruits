@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div class="starting-container fade-in" *ngIf="starting && !(roundNumber+1>(game|async)?.roundsNumber)">
+    <div class="starting-container fade-in" *ngIf="starting && !sortedUsers">
         <div class="text-container">
             <h1>Starting round...</h1>
         </div>
@@ -56,7 +56,7 @@
         </div>
     </div>
 
-    <div class="started-container" *ngIf="started && !reviewing && !(roundNumber+1>(game|async)?.roundsNumber)">
+    <div class="started-container" *ngIf="started && !reviewing && !sortedUsers">
         <div class="header-div fade-in">
             <h3>
                 ROUND {{roundNumber + 1}}/{{(game|async)?.roundsNumber}}
@@ -85,7 +85,7 @@
         </div>
     </div>
 
-    <div class="round-revision-container" *ngIf="reviewing && !(roundNumber+1>(game|async)?.roundsNumber)">
+    <div class="round-revision-container" *ngIf="reviewing && !sortedUsers">
         <div class="header-div fade-in">
             <h3>
                 ROUND {{roundNumber + 1}}/{{(game|async)?.roundsNumber}}
@@ -167,18 +167,40 @@
         </div>
     </div>
 
-    <div class="final-page-container" *ngIf="roundNumber+1>(game|async)?.roundsNumber">
+    <div class="final-page-container" *ngIf="sortedUsers">
         <div class="final-header">
             <h1>GAME ENDED!</h1>
         </div>
 
-        <div class="results-container" *ngIf="getSortedUsers()">
+        <div class="final-footer">
+            <button [routerLink]="'/game'">CREATE NEW GAME</button>
+        </div>
+
+        <div class="results-container">
             <div class="results-inner">
                 <div class="users-container">
-                    <div *ngFor="let user of getSortedUsers()" class="user">
+                    <div class="user">
                         <div class="user-inner">
                             <div class="user-icon">
-                                <i class="fa fa-user"></i>
+                                <span class="fa-stack">
+                                    <i class="fa fa-user fa-stack-2x"></i>
+                                    <i class="fa fa-crown fa-stack-1x"></i>
+                                </span>
+                            </div>
+                            <div class="user-name">
+                                {{sortedUsers[0].displayName}}
+                            </div>
+                            <div class="points">
+                                {{results[sortedUsers[0].uid]}}pts
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="users-container not-winner">
+                    <div *ngFor="let user of sortedUsers.slice(1, sortedUsers.length);let i=index" class="user">
+                        <div class="user-inner">
+                            <div class="user-position">
+                                <h4>{{i+2}}º</h4>
                             </div>
                             <div class="user-name">
                                 {{user?.displayName}}
@@ -190,10 +212,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="final-footer">
-            <button [routerLink]="'/game'">CREATE NEW GAME</button>
         </div>
     </div>
 
