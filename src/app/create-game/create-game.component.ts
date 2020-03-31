@@ -151,7 +151,6 @@ export class CreateGameComponent implements OnInit {
   }
 
   public categoryAdded(category: string): boolean {
-    console.log(this.game.categories.find((c => c.toLowerCase().split(' ').join('') === category.toLowerCase().split(' ').join(''))));
     return this.game.categories.find((c => c.toLowerCase().split(' ').join('') === category.toLowerCase().split(' ').join('')))
       !== undefined;
   }

@@ -262,7 +262,7 @@ export class PlayGameComponent implements OnInit {
         const catResponses = [];
         round.responses.filter(r => r.category === c).forEach(
           response => {
-            catResponses.push(response.responseValue.toLowerCase().trim());
+            catResponses.push(response.responseValue.toLowerCase().split(' ').join(''));
             if (this.isValidResponse(response)) {
               this.results[response.user] += 5;
             }
@@ -284,9 +284,8 @@ export class PlayGameComponent implements OnInit {
   }
 
   public getSortedUsers(): User[] {
-    // console.log('sort');
-    // console.log(this.results);
     this.getResults();
+    
     const points: number[] = [];
     this.users.forEach(u => {
       points.push(this.results[u.uid]);
@@ -305,15 +304,9 @@ export class PlayGameComponent implements OnInit {
 
     const sortedUsers: User[] = [];
     this.users.forEach(u => {
-      // console.log(u.uid);
-      // console.log('su', sortedUsers);
-      // console.log('sp', sortedPoints);
-
       sortedUsers[sortedPoints.indexOf(this.results[u.uid])] = u;
       sortedPoints[sortedPoints.indexOf(this.results[u.uid])] = null;
     });
-
-    // console.log('final', sortedUsers);
 
     return sortedUsers;
   }
@@ -321,7 +314,7 @@ export class PlayGameComponent implements OnInit {
   private getMatches(array: string[], test: string) {
     let count = 0;
     array.forEach(e => {
-      if (e === test.toLowerCase().trim()) {
+      if (e.toLowerCase().split(' ').join('') === test.toLowerCase().split(' ').join('')) {
         count++;
       }
     });
