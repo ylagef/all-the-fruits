@@ -1,4 +1,5 @@
-<div class="play-game-container" *ngIf="game|async">
+<!-- {{(game$ | async)|json}} -->
+<div class="play-game-container" *ngIf="(game$ | async)">
     <div class="copy-code-container fade-in" *ngIf="!started && !starting">
         <div class="label-div">
             <label>{{'Share this code for start playing!' | translate }}</label>
@@ -37,8 +38,8 @@
 
     <div class="added-users" *ngIf="!started && !starting">
         <div class="waiting-div">
-            <label class="loading">{{'Waiting for' | translate }} {{(game|async)?.people - users?.length}}
-                {{(((game|async)?.people - users?.length===1)?'player':'players') | translate }}</label>
+            <label class="loading">{{'Waiting for' | translate }} {{(game$ | async)?.people - users?.length}}
+                {{(((game$ | async)?.people - users?.length===1)?'player':'players') | translate }}</label>
         </div>
         <div class="users-container">
             <div *ngFor="let user of users" class="user fade-in">
@@ -74,11 +75,20 @@
     <div class="started-container" *ngIf="started && !reviewing && !sortedUsers">
         <div class="header-div fade-in">
             <h3>
-                {{'ROUND' | translate }} {{roundNumber + 1}}/{{(game|async)?.roundsNumber}}
+                {{'ROUND' | translate }} {{roundNumber + 1}}/{{(game$ | async)?.roundsNumber}}
             </h3>
             <h1>
                 {{currentLetter}}
             </h1>
+        </div>
+
+        <div class="hint">
+            <button class="button fade-in" *ngIf="!hint" (click)="hint=true">
+                {{'info' | translate }}
+            </button>
+            <label *ngIf="hint" class="fade-in"
+                [innerHTML]="'The game consist on writing a word or phrase starting with the above letter for each of the categories.<br />Finally, click on STOP when you are done.<br />Do it AS FAST AS YOU CAN!'|translate">
+            </label>
         </div>
 
         <div class="category-container" *ngIf="!reviewing">
@@ -103,11 +113,20 @@
     <div class="round-revision-container" *ngIf="reviewing && !sortedUsers">
         <div class="header-div fade-in">
             <h3>
-                {{'ROUND' | translate }} {{roundNumber + 1}}/{{(game|async)?.roundsNumber}}
+                {{'ROUND' | translate }} {{roundNumber + 1}}/{{(game$ | async)?.roundsNumber}}
             </h3>
             <h1>
                 {{currentLetter}}
             </h1>
+        </div>
+
+        <div class="hint">
+            <button class="button fade-in" *ngIf="!hint" (click)="hint=true">
+                {{'info' | translate }}
+            </button>
+            <label *ngIf="hint" class="fade-in">
+                {{'In the review section, players decide whether an answer is valid or not. To do this, they must click "NO!" if they consider that an answer is incorrect (this will mark that the user believes that it is not correct, changing the button to "YES!" in case he wants to rectify the answer). Empty answers are incorrect by default. Finally, once the review is complete, click on "Next round", and when all users have requested the next round, it will begin.' | translate }}
+            </label>
         </div>
 
         <div class="categories-container fade-in" *ngIf="allResponsesLoaded()">

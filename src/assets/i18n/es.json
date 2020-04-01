@@ -32,5 +32,10 @@
   "Number of people": "Nº de personas",
   "Custom category": "Categoría personalizada",
   "Play *ALL THE FRUITS* with me!": "Juega *ALL THE FRUITS* conmigo!",
-  "Play ALL THE FRUITS with me!": "Juega ALL THE FRUITS conmigo!"
+  "Play ALL THE FRUITS with me!": "Juega ALL THE FRUITS conmigo!",
+  "In the review section, players decide whether an answer is valid or not. To do this, they must click 'NO!' if they consider that an answer is incorrect (this will mark that the user believes that it is not correct, changing the button to 'YES! in case he wants to rectify the answer).<br />Empty answers are incorrect by default.<br />Finally, once the review is complete, click on 'Next round', and when all users have requested the next round, it will begin.": "En la sección de revisión, los jugadores deciden si una respuesta es válida o no. Para hacer esto, deben hacer clic en 'NO!' si consideran que una respuesta es incorrecta (esto marcará que el usuario cree que no es correcta, cambiando el botón a 'SÍ!' en caso de que quiera rectificar la respuesta). Las respuestas vacías son incorrectas por defecto. Finalmente, una vez que se complete la revisión, haz clic en 'Siguiente ronda', y cuando todos los usuarios hayan solicitado la siguiente ronda, comenzará.",
+  "The game consist on writing a word or phrase starting with the above letter for each of the categories.<br />Finally, click on STOP when you are done.<br />Do it AS FAST AS YOU CAN!": "El juego consiste en escribir una palabra o frase que comience con la letra superior para cada una de las categorías.<br />Finalmente, haz clic en PARAR! cuando hayas terminado.<br />¡Hazlo tan rápido como puedas!",
+  "Choose the letters you want to play with.<br />RED means disabled, so they will not be used on this game.": "Elige las letras con las que quieres jugar.<br />ROJO significa deshabilitada, por lo que no se utilizarán en esta partida.",
+  "Choose at least 3 categories from the suggestion list or create custom ones. Those will be the categories about which you will have to write words.": "Elija al menos 3 categorías de la lista de sugerencias o crea otras personalizadas. Esas serán las categorías sobre las cuales tendrás que escribir palabras.",
+  "load more": "cargar más"
 }

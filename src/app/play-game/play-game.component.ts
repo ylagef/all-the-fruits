@@ -10,7 +10,7 @@ import { User } from '../shared/models/user.model';
   styleUrls: ['./play-game.component.scss']
 })
 export class PlayGameComponent implements OnInit {
-  @Input() game: Observable<Game>;
+  public game$: Observable<Game>;
   @Input() gameId: string;
 
   private currentUser: User;
@@ -42,13 +42,18 @@ export class PlayGameComponent implements OnInit {
 
   private nexted: boolean;
 
+  public hint = false;
+
   constructor(private gameService: GameService) { }
 
   ngOnInit() {
     this.isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
     this.currentUser = JSON.parse(localStorage.getItem('user'));
-    this.game.subscribe(
-      (game) => {
+
+    this.game$ = this.gameService.game$;
+
+    this.game$.subscribe(
+      (game: Game) => {
         // this.reviewing = !this.started && (game.rounds[game.currentRoundNumber] && game.rounds[game.currentRoundNumber].ended);
         // console.log('event received');
         if (!this.started) {
@@ -71,7 +76,7 @@ export class PlayGameComponent implements OnInit {
             if (this.currentUser) {
               if (!this.users.find(u => u.uid === this.currentUser.uid)) {
                 this.users.push(this.currentUser);
-                this.gameService.addUserToGame(this.gameId, this.users, this.users.length === game.people);
+                this.gameService.addUserToGame(this.users, this.users.length === game.people);
               }
             }
           }
@@ -84,6 +89,7 @@ export class PlayGameComponent implements OnInit {
             // console.log('Round ended');
             if (this.allMyResponsesLoaded(game)) {
               // console.log('My responses loaded');
+              this.hint = false;
               this.reviewing = true;
               this.rounds[this.roundNumber].responses = game.rounds[this.roundNumber].responses;
             } else {
@@ -138,6 +144,7 @@ export class PlayGameComponent implements OnInit {
       this.started = false;
       this.reviewing = false;
       this.nexted = false;
+      this.hint = false;
 
       this.startCountdown();
     } else {
@@ -170,7 +177,7 @@ export class PlayGameComponent implements OnInit {
     selBox.style.left = '0';
     selBox.style.top = '0';
     selBox.style.opacity = '0';
-    selBox.value = this.routePrefix + this.gameId;
+    selBox.value = this.routePrefix + this.gameService.id;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();
@@ -220,12 +227,22 @@ export class PlayGameComponent implements OnInit {
     const uid = this.currentUser.uid;
     const uindex = this.users.findIndex(u => u.uid === uid);
 
-    this.gameService.stopRound(this.gameId, this.roundNumber, this.rounds[this.roundNumber], uindex, this.categories.length,
+    this.gameService.stopRound(this.roundNumber, this.rounds[this.roundNumber], uindex, this.categories.length,
       this.roundNumber, uid);
   }
 
   public getUserName(uid: string) {
-    return (this.users.find(u => u.uid === uid)) ? this.users.find(u => u.uid === uid).displayName : '';
+    const username = this.users.find(u => u.uid === uid).displayName;
+    const usernameSplitted = this.users.find(u => u.uid === uid).displayName.split(' ');
+
+    let aux;
+    if (usernameSplitted.length > 2) {
+      aux = usernameSplitted[0] + ' ' + usernameSplitted[1];
+    } else {
+      aux = username;
+    }
+
+    return (this.users.find(u => u.uid === uid)) ? aux : '';
   }
 
   public getCurrentUserIndex() {
@@ -270,13 +287,13 @@ export class PlayGameComponent implements OnInit {
   }
 
   public check(response: Response): void {
-    this.gameService.updateChecks(this.gameId, this.roundNumber, this.rounds[this.roundNumber].responses.indexOf(response),
+    this.gameService.updateChecks(this.roundNumber, this.rounds[this.roundNumber].responses.indexOf(response),
       this.getCurrentUserIndex(), !response.valid[this.getCurrentUserIndex()]);
   }
 
   public nextRound(): void {
     this.nexted = true;
-    this.gameService.updateNext(this.gameId, this.roundNumber, this.getCurrentUserIndex());
+    this.gameService.updateNext(this.roundNumber, this.getCurrentUserIndex());
   }
 
   public getCeilNumber(n: number): number {

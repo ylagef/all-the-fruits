@@ -1,4 +1,7 @@
+<!-- {{loaded}}
+{{(game$|async) | json}} -->
+
 <div class="game-container" *ngIf="loaded">
-    <app-create-game *ngIf="!game"></app-create-game>
-    <app-play-game *ngIf="game" [game]="game" [gameId]="gameId"></app-play-game>
+    <app-create-game *ngIf="(game$|async)===null"></app-create-game>
+    <app-play-game *ngIf="(game$|async)!==null" [gameId]="gameId"></app-play-game>
 </div>

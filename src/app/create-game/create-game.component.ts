@@ -24,7 +24,8 @@ export class CreateGameComponent implements OnInit {
     'Nombre propio', 'Película o serie', 'País o ciudad', 'Fruta o verdura', 'Personaje famoso', 'Comida',
     'Excusa para llegar tarde', 'Apellido', 'Marca de automóvil', 'Videojuego', 'Artista', 'Libro', 'Animal',
     'Dibujo animado', 'Color', 'Equipo de fútbol', 'Grupo musical', 'Parte del cuerpo', 'Marca', 'Flor o planta',
-    'Objeto', 'Profesión', 'Adjetivo', 'Insulto'
+    'Objeto', 'Profesión', 'Adjetivo', 'Insulto', 'Bebida', 'Electrodoméstico', 'Prenda', 'Carrera Universitaria',
+    'Asignatura', 'Instrumento', 'Herramienta', 'Deporte'
   ];
 
   public step = 0;
@@ -34,7 +35,10 @@ export class CreateGameComponent implements OnInit {
   public roundsError: string;
   public lettersError: string;
 
-  @Output() gameCreatedEvent = new EventEmitter<Game>();
+  public lettersHint = false;
+  public categoriesHint = false;
+
+  public suggestedAmount = 10;
 
   constructor(
     private authService: AuthService,
@@ -44,13 +48,30 @@ export class CreateGameComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.authService.user;
-    // this.game = new Game(null, this.user.uid, [], this.allLetters.splice(0), 1, 5);
+
     this.game = new Game();
-    this.game.admin = 'hLYSQon1lzc3lUitr0WIcLmVA0J2';
     this.game.categories = [];
     this.game.excludedLetters = ['Ñ', 'W', 'X', 'Y', 'Z'];
     this.game.roundsNumber = 5;
     this.game.people = 2;
+
+    // Shuffle array
+    for (let i = this.suggestedCategories.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.suggestedCategories[i], this.suggestedCategories[j]] = [this.suggestedCategories[j], this.suggestedCategories[i]];
+    }
+  }
+
+  public getSuggestedCategories(): string[] {
+    return this.suggestedCategories.slice(0, this.suggestedAmount);
+  }
+
+  public loadMore(): void {
+    if (this.suggestedAmount + 5 > this.suggestedCategories.length) {
+      this.suggestedAmount = this.suggestedCategories.length;
+    } else {
+      this.suggestedAmount += 5;
+    }
   }
 
   public handleLetter(letter: string): void {
@@ -110,12 +131,13 @@ export class CreateGameComponent implements OnInit {
     this.checkLetterError();
 
     if (!this.categoriesError && !this.peopleError && !this.roundsError && !this.lettersError) {
-      this.gameService.createGame(this.game).then(
-        data => {
-          this.game.id = data.id;
-          this.router.navigate(['game/' + this.game.id]);
-        }
-      ).catch(error => console.error(error));
+      this.gameService.createGame(this.game);
+      // .then(
+      //   data => {
+      //     this.game.id = data.id;
+      //     this.router.navigate(['game/' + this.game.id]);
+      //   }
+      // ).catch(error => console.error(error));
     }
   }
 

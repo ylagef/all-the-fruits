@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Game, Round, Response } from '../models/game.model';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { User } from '../models/user.model';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +12,19 @@ export class GameService {
   public letters: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
     'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
-  constructor(
-    private firestore: AngularFirestore
-  ) { }
+  private gamesRef: AngularFirestoreCollection<Game>;
+  private gameRef: AngularFirestoreDocument<any>;
+  public game$: Observable<any>;
+  public id: string;
 
-  public createGame(game: Game) {
+  constructor(
+    private firestore: AngularFirestore,
+    private router: Router
+  ) {
+    this.gamesRef = this.firestore.collection('games');
+  }
+
+  public createGame(game: Game): void {
     const roundsArray: Round[] = [];
     this.letters = this.letters.filter(l => !game.excludedLetters.includes(l));
 
@@ -55,35 +64,61 @@ export class GameService {
     game.users = [];
     game.rounds = roundsArray;
     game.currentRoundNumber = -1;
+    game.admin = JSON.parse(localStorage.getItem('user')).uid;
 
-    return this.firestore.collection('games').add(JSON.parse(JSON.stringify(game)));
+    this.gamesRef.add(JSON.parse(JSON.stringify(game))).then(
+      docRef => {
+        this.getGame(docRef.id);
+      }
+    );
   }
 
-  public getGame(id: string): Observable<any> {
+  public getGame(id: string): Observable<Game> {
     // console.log('g g');
-    return this.firestore.collection<Game>('games').doc(id).valueChanges();
+    this.id = id;
+
+    this.gameRef = this.gamesRef.doc(this.id);
+    this.game$ = this.gamesRef.doc(this.id).valueChanges();
+
+    const sub = this.game$.subscribe(
+      (g: Game) => {
+        const current = JSON.parse(localStorage.getItem('user'));
+        if (g === undefined || ((g.people === g.users.length) && !(g.users.find(u => u.uid === current.uid)))) {
+          // If undefined or if full and I'm not player
+          this.router.navigate(['game']);
+        } else {
+          this.router.navigate(['game/' + this.id]);
+        }
+
+        sub.unsubscribe();
+      }
+    );
+
+    return this.game$;
   }
 
-  public addUserToGame(gameId: string, users: User[], lastUser: boolean) {
+  public addUserToGame(users: User[], lastUser: boolean): void {
     // console.log('a u t g');
     if (lastUser) {
-      this.firestore.collection('games').doc(gameId).update(
+      this.gameRef.update(
         {
           users,
           currentRoundNumber: 0
         }
       );
     } else {
-      this.firestore.collection('games').doc(gameId).update(
+      this.gameRef.update(
         { users }
       );
     }
   }
 
-  public stopRound(gameId: string, id: number, round: Round, from: number, amount: number, roundNumber: number, uid: string) {
+  public stopRound(id: number, round: Round, from: number, amount: number, roundNumber: number, uid: string): void {
     // console.log('s r');
-    const sub = this.firestore.collection<Game>('games').doc(gameId).valueChanges().subscribe(
+    const sub = this.game$.subscribe(
       (game: Game) => {
+        // const game = doc.data();
+
         if (!game.rounds[id].ended) {
           game.rounds[id].ended = true;
         }
@@ -101,28 +136,27 @@ export class GameService {
           }
         }
 
-        this.firestore.collection('games').doc(gameId).update(JSON.parse(JSON.stringify(game)));
+        this.gameRef.update(JSON.parse(JSON.stringify(game)));
         sub.unsubscribe();
       }
     );
   }
 
-  public updateChecks(gameId: string, id: number, responseIndex: number, userIndex: number, value: boolean) {
+  public updateChecks(id: number, responseIndex: number, userIndex: number, value: boolean): void {
     // console.log('u c');
-
-    const sub = this.firestore.collection<Game>('games').doc(gameId).valueChanges().subscribe(
+    const sub = this.game$.subscribe(
       (game: Game) => {
         game.rounds[id].responses[responseIndex].valid[userIndex] = value;
 
-        this.firestore.collection('games').doc(gameId).update(JSON.parse(JSON.stringify(game)));
+        this.gameRef.update(JSON.parse(JSON.stringify(game)));
         sub.unsubscribe();
       }
     );
   }
 
-  public updateNext(gameId: string, id: number, userIndex: number) {
+  public updateNext(id: number, userIndex: number): void {
     // console.log('u c');
-    const sub = this.firestore.collection<Game>('games').doc(gameId).valueChanges().subscribe(
+    const sub = this.game$.subscribe(
       (game: Game) => {
         if (!game.rounds[id].next[userIndex]) {
           game.rounds[id].next[userIndex] = true;
@@ -131,7 +165,7 @@ export class GameService {
             game.currentRoundNumber++;
           }
 
-          this.firestore.collection('games').doc(gameId).update(JSON.parse(JSON.stringify(game)));
+          this.gameRef.update(JSON.parse(JSON.stringify(game)));
         }
 
         sub.unsubscribe();

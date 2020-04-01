@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    this.afAuth.authState.subscribe((user: User) => {
+    const authSub = this.afAuth.authState.subscribe((user: User) => {
       if (!user) {
         this.route.paramMap.subscribe(
           params => {
@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
       } else {
         this.router.navigate(['/game']);
       }
+      authSub.unsubscribe();
     });
   }
 

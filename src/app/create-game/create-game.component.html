@@ -23,6 +23,14 @@
         <div class="label-div">
             <label>{{'LETTERS:' | translate }}</label>
         </div>
+        <div class="hint">
+            <button class="button fade-in" *ngIf="!lettersHint" (click)="lettersHint=true">
+                {{'info' | translate }}
+            </button>
+            <label *ngIf="lettersHint" class="fade-in" [innerHTML]="'Choose the letters you want to play with.<br />RED means disabled, so they will not be used on this game.' | translate ">
+                
+            </label>
+        </div>
         <div class="letters-inner-container" *ngIf="game.excludedLetters">
             <div *ngFor="let letter of allLetters" class="letter"
                 [ngStyle]="{'background-color': (game.excludedLetters.includes(letter))?'lightcoral':'lightgreen'}"
@@ -31,13 +39,21 @@
             </div>
         </div>
     </div>
-    <div class="categories-container  fade-in" *ngIf="step>=2">
+    <div class="categories-container fade-in" *ngIf="step>=2">
         <div class="label-div">
             <label>{{'CATEGORIES:' | translate }}</label>
         </div>
+        <div class="hint">
+            <button class="button fade-in" *ngIf="!categoriesHint" (click)="categoriesHint=true">
+                {{'info' | translate }}
+            </button>
+            <label *ngIf="categoriesHint" class="fade-in">
+                {{'Choose at least 3 categories from the suggestion list or create custom ones. Those will be the categories about which you will have to write words.' | translate }}
+            </label>
+        </div>
 
         <div class="categories-list suggested-list">
-            <div *ngFor="let c of suggestedCategories; let i = index" class="category suggested fade-in"
+            <div *ngFor="let c of getSuggestedCategories(); let i = index" class="category suggested fade-in"
                 (click)="categoryAdded(c)?removeSuggestedCategory(i):addSuggestedCategory(i)"
                 [class.suggested-added]="categoryAdded(c)">
                 <div class="category-name">
@@ -49,6 +65,13 @@
                 <div class="trash-div" *ngIf="categoryAdded(c)">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                 </div>
+            </div>
+
+            <div class="load-more-div fade-in">
+                <button class="button load-more" *ngIf="suggestedAmount<suggestedCategories.length"
+                    (click)="loadMore()">
+                    {{'load more' | translate }}
+                </button>
             </div>
         </div>
 

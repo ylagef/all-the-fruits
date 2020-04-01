@@ -648,7 +648,7 @@
               width: 20%;
               display: flex;
               align-items: center;
-              justify-content: end;
+              justify-content: flex-end;
 
               .name {
                 margin-left: 10px;
@@ -914,6 +914,7 @@
 
               .user-name {
                 padding: 3px;
+                overflow: auto;
               }
 
               .points {
@@ -945,11 +946,37 @@
       }
 
       button:hover {
-        background: black;
+        background: rgb(167, 156, 156);
         color: white;
         border: 1px solid black;
       }
     }
+  }
+}
+
+.hint {
+  text-align: center;
+  padding-bottom: 10px;
+  width: 70%;
+  font-size: 15px;
+  opacity: 0.7;
+
+  .button {
+    background: transparent;
+    border: 1px solid black;
+    border-radius: 10px;
+    font-size: 15px;
+    padding: 0 5px;
+
+    cursor: pointer;
+
+    font-family: "Montserrat", sans-serif;
+  }
+
+  .button:hover {
+    background: black;
+    color: white;
+    border: 1px solid black;
   }
 }
 
@@ -1027,6 +1054,10 @@
           }
         }
       }
+    }
+
+    .hint {
+      width: 90%;
     }
   }
 }
